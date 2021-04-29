@@ -1,0 +1,19 @@
+main: net.iamvishnu.BirthdayBoy.BirthdayBoy
+api-version: 1.16
+name: BirthdayBoy
+version: 0.0.1
+author: IAMVISHNU Media
+website: iamvishnu.net
+description: A Birthday tracker and age gater
+commands:
+    birthday:
+        description: Set or check birthday
+        aliases: [bday, bd]
+        usage: /birthday (info | set | claim | remove)
+permissions:
+    birthday.bypass:
+        description: Allows users to bypass age verification
+        default: op
+    birthday.others:
+        description: Allows users to modify others' birthday records
+        default: op

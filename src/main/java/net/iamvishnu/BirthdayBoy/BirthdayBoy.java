@@ -1,7 +1,5 @@
 package net.iamvishnu.BirthdayBoy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,21 +14,20 @@ public final class BirthdayBoy extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		Plugin = this;
+		
 		saveDefaultConfig();
 		getConfig();
 		BirthdayConfig = new Config("birthdays.yml");
 		BirthdayConfig.save();
 		BirthdayConfig.reload();
 		
-		getCommand("birthday").setExecutor(new CommandHandler());
-		List<String> aliases = new ArrayList<String>();
-		aliases.add("bday");
-		aliases.add("bd");
-		getCommand("birthday").setAliases(aliases);
+		CommandHandler commander = new CommandHandler();
+		getCommand("birthday").setExecutor(commander);
 		getServer().getPluginManager().registerEvents(new BirthdayBoyEventListener(), Plugin);
 		serverLog.info("BirthdayBoy started successfully.");
 	}
 	
+	@Override
 	public void onDisable() {
 		saveConfig();
 		BirthdayConfig.save();

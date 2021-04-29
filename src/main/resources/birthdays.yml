@@ -4,5 +4,4 @@
 #==================
 
 # Birthdays are listed in the form <uuid>;<yyyymmdd>;<yyyymmdd> where the first date is their assigned birthday and the second is the last date they claimed a reward.
-birthdays:
-#    - 123;19900511;20200123
+birthdays: []

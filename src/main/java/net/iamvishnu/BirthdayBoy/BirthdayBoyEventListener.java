@@ -8,15 +8,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 @SuppressWarnings("deprecation")
 public class BirthdayBoyEventListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
-	public void onLogin(PlayerLoginEvent e) {
+	public void onLogin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		Birthday b = Birthday.GetBirthday(player);
 		if (b == null) {
@@ -47,6 +47,7 @@ public class BirthdayBoyEventListener implements Listener {
 		Player player = e.getPlayer();
 		Birthday b = Birthday.GetBirthday(player);
 		if (b == null && BirthdayBoy.GetConfig().getBoolean("restrict-movement") && !player.hasPermission("birthday.bypass")) {
+			if (e.getTo().distance(player.getLocation()) == 0) return;
 			e.setCancelled(true);
 			String msg =  ChatColor.translateAlternateColorCodes('&', BirthdayBoy.GetConfig().getString("restrict-movement-msg"));
 			if (msg != null && !msg.isBlank()) player.sendMessage(msg);
@@ -54,12 +55,13 @@ public class BirthdayBoyEventListener implements Listener {
 	}
 	
 	@EventHandler (priority = EventPriority.HIGH)
-	public void onPlayerChat(PlayerChatEvent e) {
-		if(!BirthdayBoy.GetConfig().getBoolean("age-validation")) return;
+	public void onPlayerChat(AsyncPlayerChatEvent e) {
+		if(!BirthdayBoy.GetConfig().getBoolean("age-validation") || !BirthdayBoy.GetConfig().getBoolean("restrict-chat")) return;
 		Player player = e.getPlayer();
 		Birthday b = Birthday.GetBirthday(player);
-		if (b == null && BirthdayBoy.GetConfig().getBoolean("restrict-chat") && !player.hasPermission("birthday.bypass")) {
-			if (e.getMessage().charAt(0) != '/') return;
+		if (b == null && !player.hasPermission("birthday.bypass")) {
+			//BirthdayBoy.serverLog.info("Message: " + e.getMessage());
+			if (e.getMessage().charAt(0) == '/') return;
 			e.setCancelled(true);
 			String msg =  ChatColor.translateAlternateColorCodes('&', BirthdayBoy.GetConfig().getString("restrict-chat-msg"));
 			if (msg != null && !msg.isBlank()) player.sendMessage(msg);
@@ -68,22 +70,23 @@ public class BirthdayBoyEventListener implements Listener {
 	
 	@EventHandler (priority = EventPriority.HIGH)
 	public void onCommand(PlayerCommandPreprocessEvent e) {
-		if(!BirthdayBoy.GetConfig().getBoolean("age-validation")) return;
+		if(!BirthdayBoy.GetConfig().getBoolean("age-validation") || !BirthdayBoy.GetConfig().getBoolean("restrict-commands")) return;
 		Player player = e.getPlayer();
 		Birthday b = Birthday.GetBirthday(player);
-		if (b == null && BirthdayBoy.GetConfig().getBoolean("restrict-commands") && !player.hasPermission("birthday.bypass")) {
+		if (b == null && !player.hasPermission("birthday.bypass")) {
+			//BirthdayBoy.serverLog.info("Message: " + e.getMessage());
 			
 			// Check to see if command is allowed
 			String message = e.getMessage();
 			String[] arr = message.split(" ");
 			List<String> allowed = BirthdayBoy.GetConfig().getStringList("command-whitelist");
-			if (allowed.size() > 0 && allowed.contains(arr[0])) return;
+			if (allowed.size() > 0 && allowed.contains(arr[0].replace("/",""))) return;
 			
 			List<String> baked_in = new ArrayList<String>();
 			baked_in.add("birthday");
 			baked_in.add("bday");
 			baked_in.add("bd");
-			if (baked_in.contains(arr[0])) return;
+			if (baked_in.contains(arr[0].replace("/",""))) return;
 			
 			// Cancel event
 			e.setCancelled(true);

@@ -36,7 +36,7 @@ public class Messaging {
 	}
 	
 	public static String birthdayNotSet() {
-		return ChatColor.RED + "Your birthday has not yet been set. Use \"" + ChatColor.YELLOW + "/birthday set <yyyymmdd>" + ChatColor.RED + "\" to set.";
+		return ChatColor.RED + "Your birthday has not yet been set. Use \"" + ChatColor.YELLOW + "/birthday set <yyyyMMdd>" + ChatColor.RED + "\" to set.";
 	}
 	
 	public static String birthdayNotFound(String name) {
@@ -83,6 +83,10 @@ public class Messaging {
 	}
 	
 	public static String setBdayPrompt() {
-		return ChatColor.RED + "Before you can join the server, please take a moment to set your date of birth. Type \"" + ChatColor.YELLOW + "/bday set <yyyymmdd>" + ChatColor.RED + "\" to set your date of birth.";
+		return ChatColor.RED + "Before you can join the server, please take a moment to set your date of birth. Type \"" + ChatColor.YELLOW + "/bday set <yyyyMMdd>" + ChatColor.RED + "\" to set your date of birth.";
+	}
+	
+	public static String specifyPlayerArgument() {
+		return ChatColor.RED + "Please specify a player.";
 	}
 }

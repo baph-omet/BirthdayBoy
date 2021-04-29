@@ -1,7 +1,7 @@
 main: net.iamvishnu.BirthdayBoy.BirthdayBoy
 api-version: 1.16
 name: BirthdayBoy
-version: 0.0.1
+version: 0.1.0
 author: IAMVISHNU Media
 website: iamvishnu.net
 description: A Birthday tracker and age gater

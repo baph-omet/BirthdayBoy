@@ -1,0 +1,62 @@
+#===================
+# BirthdayBoy Config
+#===================
+
+# == Age Validation ==
+# Whether or not to use age validation feature. If false, everything else in this section will be ignored.
+age-validation: true
+
+# Restrictions on non-verified players.
+
+# If true, non-verified players will not be able to move.
+restrict-movement: false
+# The message to send to a player who tries to move before setting age.
+restrict-movement-msg: "&4Please verify your age before moving. Type &f/bd set <yyyymmdd> &4to set your birthday."
+
+# If true, non-verified players will not be able to send chat messages.
+restrict-chat: true
+# The message to send to a player who tries to chat before setting age.
+restrict-chat-msg: "&4Please verify your age before chatting. Type &f/bd set <yyyymmdd> &4to set your birthday."
+
+# If true, non-verified players will not be able to send commands.
+restrict-commands: true
+
+# The following commands ignore the restrict-commands restriction.
+command-whitelist:
+    - help
+    - rules
+
+# Users must be at least this age in order to pass validation checks.
+minimum-age: 13
+
+# Commands sent when user passes or fails age validation. Use '%p' for target player's name and '%a' for minimum age.
+cmds-on-validate-success: 
+    - "say %p age validated successfully."
+cmds-on-validate-failure: 
+    - "kick %p Failed age validation. You must be %a to play on this server."
+
+# == Birthday ==
+# Whether or not to use birthday rewards. If false, everything else in this section will be ignored.
+birthday: true
+
+# If true, allow users to set their birthday to the current date.
+allow-sameday: false
+
+# Worlds in which reward claiming is allowed. Ignored if list is empty.
+allowed-worlds:
+    - world
+    - world_nether
+    - world_the_end
+
+# When set to true, the claim command is disabled for players in Creative and Spectator gamemodes.
+block-creative-claiming: true
+
+# Commands sent when player claims their reward. Use '%p' for target player.
+cmds-reward:
+    - "give %p diamond 1"
+
+# Message to be sent when player logs in on their birthday. Leave blank to disable. Supports & color codes.
+msg-reward: "&9Happy birthday, %p! Type &e/bday claim&9 to claim your birthday rewards!"
+
+# Message to be sent to all players when a player with a birthday logs in. Leave blank to disable. Supports & color codes.
+msg-login: "&9Today is %p's birthday!"

@@ -1,0 +1,8 @@
+#==================
+# Birthdays.yml
+# Registered birthdays are kept here. Delete a user's entry to make them unverified.
+#==================
+
+# Birthdays are listed in the form <uuid>;<yyyymmdd>;<yyyymmdd> where the first date is their assigned birthday and the second is the last date they claimed a reward.
+birthdays:
+#    - 123;19900511;20200123

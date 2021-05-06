@@ -14,21 +14,7 @@ import org.bukkit.entity.Player;
 
 public class CommandHandler implements CommandExecutor {
 
-	public static String[] Labels = new String[] { "birthday", "bday", "bd" };
-
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String cmdName = command.getName().toLowerCase();
-
-		boolean found = false;
-		for (String s : Labels) {
-			if (s.equals(cmdName)) {
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-			return false;
-
 		if (args.length > 0) {
 			return Delegate(sender, args);
 		} else {

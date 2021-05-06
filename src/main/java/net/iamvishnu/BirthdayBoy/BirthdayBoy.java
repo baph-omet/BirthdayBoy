@@ -18,7 +18,6 @@ public final class BirthdayBoy extends JavaPlugin {
 		saveDefaultConfig();
 		getConfig();
 		BirthdayConfig = new Config("birthdays.yml");
-		BirthdayConfig.save();
 		BirthdayConfig.reload();
 		
 		CommandHandler commander = new CommandHandler();

@@ -14,19 +14,18 @@ import org.bukkit.entity.Player;
 
 public class CommandHandler implements CommandExecutor {
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (args.length > 0) {
+		if (args.length > 0)
 			return Delegate(sender, args);
-		} else {
-			if (sender instanceof Player) {
-				Birthday b = Birthday.GetBirthday(((Player) sender).getUniqueId());
-				if (b != null)
-					sender.sendMessage(Messaging.showBirthday(b));
-				else
-					sender.sendMessage(Messaging.birthdayNotSet());
-			} else
-				sender.sendMessage(Messaging.playersOnly());
-		}
+		if (sender instanceof Player) {
+			final Birthday b = Birthday.GetBirthday(((Player) sender).getUniqueId());
+			if (b != null)
+				sender.sendMessage(Messaging.showBirthday(b));
+			else
+				sender.sendMessage(Messaging.birthdayNotSet());
+		} else
+			sender.sendMessage(Messaging.playersOnly());
 
 		return true;
 	}
@@ -54,8 +53,8 @@ public class CommandHandler implements CommandExecutor {
 	private static void Info(CommandSender sender, String[] args) {
 		if (args.length < 2) {
 			if (sender instanceof Player) {
-				Player target = (Player) sender;
-				Birthday b = Birthday.GetBirthday(target.getUniqueId());
+				final Player target = (Player) sender;
+				final Birthday b = Birthday.GetBirthday(target.getUniqueId());
 				if (b == null)
 					sender.sendMessage(Messaging.birthdayNotSet());
 				else
@@ -76,16 +75,14 @@ public class CommandHandler implements CommandExecutor {
 			target = GetPlayerByName(args[1], sender);
 			if (target == null)
 				return;
-		} else {
-			if (sender instanceof Player) {
-				target = (Player) sender;
-			} else {
-				sender.sendMessage(Messaging.specifyPlayerArgument());
-				return;
-			}
+		} else if (sender instanceof Player)
+			target = (Player) sender;
+		else {
+			sender.sendMessage(Messaging.specifyPlayerArgument());
+			return;
 		}
 
-		Birthday b = Birthday.GetBirthday(target.getUniqueId());
+		final Birthday b = Birthday.GetBirthday(target.getUniqueId());
 		if (b == null)
 			sender.sendMessage(Messaging.birthdayNotFound(target.getName()));
 		else
@@ -101,12 +98,11 @@ public class CommandHandler implements CommandExecutor {
 		}
 
 		if (target == null) {
-			if (sender instanceof Player) {
-				target = (Player) sender;
-			} else {
+			if (!(sender instanceof Player)) {
 				sender.sendMessage(Messaging.playersOnly());
 				return;
 			}
+			target = (Player) sender;
 		}
 
 		Birthday b = Birthday.GetBirthday(target.getUniqueId());
@@ -120,13 +116,13 @@ public class CommandHandler implements CommandExecutor {
 			return;
 		}
 
-		LocalDate date = Birthday.ParseDate(args[1]);
+		final LocalDate date = Birthday.ParseDate(args[1]);
 		if (date == null) {
 			sender.sendMessage(Messaging.invalidArguments("/bday set <yyyymmdd>"));
 			return;
 		}
 
-		LocalDate now = LocalDate.now();
+		final LocalDate now = LocalDate.now();
 		if (date.getDayOfMonth() == now.getDayOfMonth() && date.getMonth() == now.getMonth()
 				&& !BirthdayBoy.GetConfig().getBoolean("allow-sameday") && !sender.hasPermission("birthday.others")) {
 			sender.sendMessage(Messaging.noSameDay());
@@ -134,11 +130,15 @@ public class CommandHandler implements CommandExecutor {
 		}
 
 		if (BirthdayBoy.GetConfig().getBoolean("age-validation")) {
-			LocalDate maximum = now.minusYears(BirthdayBoy.GetConfig().getInt("minimum-age"));
+			final LocalDate maximum = now.minusYears(BirthdayBoy.GetConfig().getInt("minimum-age"));
+			final LocalDate minimum = now.minusYears(BirthdayBoy.GetConfig().getInt("maximum-age"));
+			if (date.isBefore(minimum)) {
+				sender.sendMessage(Messaging.tooOld(minimum.toString()));
+				return;
+			}
 			if (date.isAfter(maximum)) {
-				for (String c : BirthdayBoy.GetConfig().getStringList("cmds-on-validate-failure")) {
+				for (final String c : BirthdayBoy.GetConfig().getStringList("cmds-on-validate-failure"))
 					SendCommand(c, target.getName());
-				}
 
 				BirthdayBoy.serverLog.info(sender.getName() + " failed age verification.");
 				return;
@@ -152,9 +152,8 @@ public class CommandHandler implements CommandExecutor {
 
 		b.Save();
 		if (BirthdayBoy.GetConfig().getBoolean("age-validation")) {
-			for (String c : BirthdayBoy.GetConfig().getStringList("cmds-on-validate-success")) {
+			for (final String c : BirthdayBoy.GetConfig().getStringList("cmds-on-validate-success"))
 				SendCommand(c, target.getName());
-			}
 			BirthdayBoy.serverLog.info(target.getName() + " passed age validation.");
 		}
 
@@ -168,17 +167,16 @@ public class CommandHandler implements CommandExecutor {
 			return;
 		}
 
-		OfflinePlayer target = null;
-		if (args.length > 1) {
-			target = GetPlayerByName(args[1], sender);
-			if (target == null)
-				return;
-		} else {
+		OfflinePlayer target;
+		if (args.length <= 1) {
 			sender.sendMessage(Messaging.specifyPlayerArgument());
 			return;
 		}
+		target = GetPlayerByName(args[1], sender);
+		if (target == null)
+			return;
 
-		Birthday b = Birthday.GetBirthday(target.getUniqueId());
+		final Birthday b = Birthday.GetBirthday(target.getUniqueId());
 		if (b == null) {
 			sender.sendMessage(Messaging.birthdayNotFound(null));
 			return;
@@ -202,8 +200,8 @@ public class CommandHandler implements CommandExecutor {
 			return;
 		}
 
-		Player p = (Player) sender;
-		Birthday b = Birthday.GetBirthday(p);
+		final Player p = (Player) sender;
+		final Birthday b = Birthday.GetBirthday(p);
 		if (b == null) {
 			sender.sendMessage(Messaging.birthdayNotSet());
 			return;
@@ -219,7 +217,7 @@ public class CommandHandler implements CommandExecutor {
 			return;
 		}
 
-		List<String> worlds = BirthdayBoy.GetConfig().getStringList("allowed-worlds");
+		final List<String> worlds = BirthdayBoy.GetConfig().getStringList("allowed-worlds");
 		if (worlds.size() > 0 && !worlds.contains(p.getWorld().getName())) {
 			sender.sendMessage(Messaging.invalidWorld(worlds));
 			return;
@@ -232,9 +230,8 @@ public class CommandHandler implements CommandExecutor {
 		}
 
 		// Actually give reward
-		for (String c : BirthdayBoy.GetConfig().getStringList("cmds-reward")) {
+		for (final String c : BirthdayBoy.GetConfig().getStringList("cmds-reward"))
 			SendCommand(c, p.getName());
-		}
 
 		sender.sendMessage(ChatColor.BLUE + "Rewards claimed! Have a great day!");
 
@@ -244,7 +241,7 @@ public class CommandHandler implements CommandExecutor {
 
 	@SuppressWarnings("deprecation")
 	private static OfflinePlayer GetPlayerByName(String name, CommandSender sender) {
-		OfflinePlayer target = Bukkit.getOfflinePlayer(name);
+		final OfflinePlayer target = Bukkit.getOfflinePlayer(name);
 		if (target == null)
 			sender.sendMessage(Messaging.playerNotFound(name));
 		return target;

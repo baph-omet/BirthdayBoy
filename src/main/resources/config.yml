@@ -29,6 +29,9 @@ command-whitelist:
 # Users must be at least this age in order to pass validation checks.
 minimum-age: 13
 
+# Maximum age in years a player can set.
+maximum-age: 100
+
 # Commands sent when user passes or fails age validation. Use '%p' for target player's name and '%a' for minimum age.
 cmds-on-validate-success: 
 - "say %p age validated successfully."
